@@ -27,13 +27,18 @@ class SecretManager:
 
         self._log = logging.getLogger(self.__class__.__name__)
 
-    def do_derivation(self, salt:bytes, key:bytes)->bytes:
-        raise NotImplemented()
+                    #self permet d'acceder aux variables de la class
+    def do_derivation(self, salt:bytes, key: bytes) -> bytes: #On sait que l'on doit retourner une clé de type bytes
+        cle_derive= PBKDF2HMAC(algorithm=hashes.SHA256() # 'algorithm' permet d'appeller la classe SHA256() et l'utiliser
+                               ,length=self.KEY_LENGTH,salt=salt,iterations=self.ITERATION,) #Paramètre de clé et d'itération pour hasher. 
+        return cle_derive.derive(key) #la fonction génère et retourne une nouvelle cle à partir de l'ancienne après 48000 itérations
 
-
-    def create(self)->Tuple[bytes, bytes, bytes]:
-        raise NotImplemented()
-
+    def create(self) -> Tuple[bytes, bytes, bytes]: #On doit retourner la cle, le sel, et le token obtenue avec les deux
+        salt = secrets.token_bytes(self.SALT_LENGTH) #Renvoie une chaîne d'octets aléatoire   de taille SALT_LENGTH
+        key = secrets.token_bytes(self.KEY_LENGTH) #Renvoie une chaîne d'octets aléatoire   de taille KEY_LENGTH
+        token = self.do_derivation(salt, key)[:self.TOKEN_LENGTH] #On utilise la fonction juste au dessus qu'on vient de faire pour hasher
+        return salt, key, token                                   #la taille est donnée par la variable TOKEN_LENGTH
+        #à ce stade, la clé est bien hashé, un token est généré par cette clé et le salt qui est bien aléatoire.
 
     def bin_to_b64(self, data:bytes)->str:
         tmp = base64.b64encode(data)
