@@ -110,4 +110,16 @@ class SecretManager:
 
     def clean(self):
         # remove crypto data from the target
-        raise NotImplemented()
+
+        token_path = os.path.join(self._path, "token.bin")
+        salt_path = os.path.join(self._path, "salt.bin")
+
+        if os.path.exists(token_path):
+            os.remove(token_path) #Si le chemin existe je le remove
+    
+        if os.path.exists(salt_path):
+            os.remove(salt_path) #"" 
+    
+        self._key = None #j'enleve la valeur presente dans les variables de la classe
+        self._salt = None 
+        self._token = None 
