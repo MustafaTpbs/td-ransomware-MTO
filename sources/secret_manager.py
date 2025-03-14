@@ -61,7 +61,7 @@ class SecretManager:
         else:
             salt, key, token = self.create() #Utilisation de create codé auparavant
 
-            token_file = open(token_path, "wb")
+            token_file = open(token_path, "wb") 
             token_file.write(token) #ecriture de token dans token_file en binaire
             token_file.close()
 
@@ -86,11 +86,14 @@ class SecretManager:
 
     def check_key(self, candidate_key:bytes)->bool:
         # Assert the key is valid
-        raise NotImplemented()
+        token_derive = self.do_derivation(self._salt, candidate_key)[:self.TOKEN_LENGTH] #on applique le do deriv avec le salt au candidat
+        return token_derive == self._token #on regarde si notre token donné correspond à celui intial
 
     def set_key(self, b64_key:str)->None:
         # If the key is valid, set the self._key var for decrypting
-        raise NotImplemented()
+        key_candidat = base64.b64decode(b64_key) #décode la cle fournis en bytes
+        if self.check_key(key_candidat):  #si return true lors de la comparaison avec le token
+            self._key = key_candidat 
 
     def get_hex_token(self)->str:
         # Should return a string composed of hex symbole, regarding the token
