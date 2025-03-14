@@ -73,7 +73,16 @@ class SecretManager:
 
     def load(self)->None:
         # function to load crypto data
-        raise NotImplemented()
+        token_path = os.path.join(self._path, "token.bin") #chemin d'acces au token.bin
+        salt_path = os.path.join(self._path, "salt.bin")   #chemin d'acces au salt.bin
+
+        token_file = open(token_path, "rb")
+        self._token = token_file.read() #on lit en binaire le contenu du fichier et on le met dans self.token
+        token_file.close()
+
+        salt_file = open(salt_path, "rb")
+        self._salt = salt_file.read() # "" 
+        salt_file.close()
 
     def check_key(self, candidate_key:bytes)->bool:
         # Assert the key is valid
